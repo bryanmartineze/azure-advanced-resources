@@ -1,0 +1,43 @@
+{
+    "mode": "All",
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "defaultValue": "Audit",
+        "allowedValues": [
+          "Audit",
+          "Disabled"
+        ],
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts"
+          },
+          {
+            "not": {
+              "field": "Microsoft.Storage/storageAccounts/sku.name",
+              "in": [
+                "Standard_LRS"
+              ]
+            }
+          },
+          {
+            "field": "Microsoft.Resources/resourceGroups/name",
+            "equals": "ConsumoAzure"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+  
